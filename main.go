@@ -4,7 +4,8 @@ import (
 	"embed"
 	"log"
 	"narria/backend/app"
-	"narria/backend/app/user"
+	"narria/backend/app/userApp"
+
 	"narria/backend/database"
 	"narria/backend/system"
 
@@ -50,7 +51,7 @@ func main() {
 	var dek []byte
 	api := &app.NarriaApi{
 		DBase: db,
-		User:  &user.User{DBase: db},
+		User:  &userApp.UserApi{DBase: db},
 		Dek:   &dek,
 	}
 	app := application.New(application.Options{

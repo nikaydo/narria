@@ -1,4 +1,4 @@
-package database
+package userDb
 
 import (
 	"narria/backend/models"
@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (u *User) GetUserSystem(uuid uuid.UUID) (models.System, error) {
+func (u *UserDb) GetUserSystem(uuid uuid.UUID) (models.System, error) {
 	var system models.System
 	err := u.Dbase.QueryRow(`SELECT 
 	language, 
@@ -34,7 +34,7 @@ func (u *User) GetUserSystem(uuid uuid.UUID) (models.System, error) {
 	return system, nil
 }
 
-func (u *User) SetUserSystem(uuid uuid.UUID, system models.System) error {
+func (u *UserDb) SetUserSystem(uuid uuid.UUID, system models.System) error {
 	_, err := u.Dbase.Exec(`UPDATE usersSystem SET 
 		language = ?,
 		theme = ?,

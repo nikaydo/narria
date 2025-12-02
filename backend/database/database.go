@@ -3,13 +3,14 @@ package database
 import (
 	"database/sql"
 	"log"
+	"narria/backend/database/userDb"
 
 	_ "modernc.org/sqlite"
 )
 
 type Database struct {
 	Dbase *sql.DB
-	User  User
+	User  userDb.UserDb
 }
 
 func (d *Database) CreteTables() error {
@@ -75,6 +76,6 @@ func InitBD(path string) (*Database, error) {
 		return nil, err
 	}
 	log.Println("Initialized app database successfully")
-	dbase.User = User{Dbase: dbase.Dbase}
+	dbase.User = userDb.UserDb{Dbase: dbase.Dbase}
 	return dbase, nil
 }

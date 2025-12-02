@@ -1,4 +1,4 @@
-package database
+package userDb
 
 import (
 	"database/sql"
@@ -9,11 +9,11 @@ import (
 	"github.com/google/uuid"
 )
 
-type User struct {
+type UserDb struct {
 	Dbase *sql.DB
 }
 
-func (u *User) InsertUser(user models.UserData, security encrypt.Security) (uuid.UUID, error) {
+func (u *UserDb) InsertUser(user models.UserData, security encrypt.Security) (uuid.UUID, error) {
 	newUUID := uuid.New()
 	securityJson, err := json.Marshal(security)
 	if err != nil {
@@ -23,7 +23,7 @@ func (u *User) InsertUser(user models.UserData, security encrypt.Security) (uuid
 	return newUUID, err
 }
 
-func (u *User) GetUserByUUID(uuid uuid.UUID) (models.UserData, error) {
+func (u *UserDb) GetUserByUUID(uuid uuid.UUID) (models.UserData, error) {
 	var user models.UserData
 	err := u.Dbase.QueryRow(`SELECT userUUID, username FROM users WHERE userUUID = ?;`, uuid.String()).Scan(&user.Uuid, &user.Password)
 	if err != nil {
@@ -32,7 +32,7 @@ func (u *User) GetUserByUUID(uuid uuid.UUID) (models.UserData, error) {
 	return user, nil
 }
 
-func (u *User) SelectUserAuthData(user models.UserData) (models.UserData, encrypt.Security, error) {
+func (u *UserDb) SelectUserAuthData(user models.UserData) (models.UserData, encrypt.Security, error) {
 	var userData models.UserData
 	var securityRaw []byte
 	err := u.Dbase.QueryRow(`SELECT userUUID, username, security FROM users WHERE username = ?;`, user.Username).Scan(&userData.Uuid, &userData.Username, &securityRaw)
@@ -47,7 +47,7 @@ func (u *User) SelectUserAuthData(user models.UserData) (models.UserData, encryp
 	return userData, security, nil
 }
 
-func (u *User) UpdateUserSecurity(uuid uuid.UUID, security encrypt.Security) error {
+func (u *UserDb) UpdateUserSecurity(uuid uuid.UUID, security encrypt.Security) error {
 	securityJson, err := json.Marshal(security)
 	if err != nil {
 		return err

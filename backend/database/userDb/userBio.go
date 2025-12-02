@@ -1,4 +1,4 @@
-package database
+package userDb
 
 import (
 	"narria/backend/models"
@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (u *User) GetUserBio(uuid uuid.UUID) (models.Bio, error) {
+func (u *UserDb) GetUserBio(uuid uuid.UUID) (models.Bio, error) {
 	var bio models.Bio
 	err := u.Dbase.QueryRow(`SELECT 
 	name, 
@@ -32,7 +32,7 @@ func (u *User) GetUserBio(uuid uuid.UUID) (models.Bio, error) {
 	return bio, nil
 }
 
-func (u *User) SetUserBio(uuid uuid.UUID, bio models.Bio) error {
+func (u *UserDb) SetUserBio(uuid uuid.UUID, bio models.Bio) error {
 	_, err := u.Dbase.Exec(`UPDATE usersBio SET 
 		name = ?,
 		surname = ?,

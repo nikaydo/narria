@@ -1,4 +1,4 @@
-package user
+package userApp
 
 import (
 	"encoding/hex"
@@ -6,7 +6,7 @@ import (
 	"narria/backend/models"
 )
 
-func (n *User) RecoveryUser(recoveryCode, passNew, username string) (models.UserData, error) {
+func (n *UserApi) RecoveryUser(recoveryCode, passNew, username string) (models.UserData, error) {
 	// проверяем пользователя и возвращаем его данные(uuid,username), ошибку
 	userData, security, err := n.DBase.User.SelectUserAuthData(models.UserData{Username: username})
 	if err != nil {

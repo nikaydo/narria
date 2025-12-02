@@ -1,9 +1,9 @@
-package user
+package userApp
 
 import (
 	"narria/backend/database"
 )
 
-type User struct {
+type UserApi struct {
 	DBase *database.Database
 }

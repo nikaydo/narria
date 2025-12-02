@@ -1,12 +1,12 @@
 package app
 
 import (
-	"narria/backend/app/user"
+	"narria/backend/app/userApp"
 	"narria/backend/database"
 )
 
 type NarriaApi struct {
 	DBase *database.Database
-	User  *user.User
+	User  *userApp.UserApi
 	Dek   *[]byte
 }

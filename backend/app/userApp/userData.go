@@ -1,4 +1,4 @@
-package user
+package userApp
 
 import (
 	"narria/backend/models"
@@ -7,7 +7,7 @@ import (
 )
 
 // GetUser получает данные пользователя по uuid
-func (n *User) GetUser(uuid uuid.UUID) (models.UserData, error) {
+func (n *UserApi) GetUser(uuid uuid.UUID) (models.UserData, error) {
 	userData, err := n.DBase.User.GetUserByUUID(uuid)
 	if err != nil {
 		return models.UserData{}, err
@@ -16,7 +16,7 @@ func (n *User) GetUser(uuid uuid.UUID) (models.UserData, error) {
 }
 
 // GetUserBio получает данные профиля пользователя по uuid
-func (n *User) GetUserBio(uuid uuid.UUID) (models.Bio, error) {
+func (n *UserApi) GetUserBio(uuid uuid.UUID) (models.Bio, error) {
 	userBio, err := n.DBase.User.GetUserBio(uuid)
 	if err != nil {
 		return models.Bio{}, err
@@ -25,6 +25,6 @@ func (n *User) GetUserBio(uuid uuid.UUID) (models.Bio, error) {
 }
 
 // SetUserBio обновляет данные профиля пользователя по uuid
-func (n *User) SetUserBio(uuid uuid.UUID, bio models.Bio) error {
+func (n *UserApi) SetUserBio(uuid uuid.UUID, bio models.Bio) error {
 	return n.DBase.User.SetUserBio(uuid, bio)
 }

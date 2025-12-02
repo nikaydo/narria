@@ -1,4 +1,4 @@
-package user
+package userApp
 
 import (
 	"encoding/hex"
@@ -9,7 +9,7 @@ import (
 )
 
 // AuthUser проверяет пользователя и возвращает его данные(uuid,username), ошибку
-func (n *User) AuthUser(userData models.UserData) (models.UserData, []byte, error) {
+func (n *UserApi) AuthUser(userData models.UserData) (models.UserData, []byte, error) {
 	userDataFromDb, security, err := n.DBase.User.SelectUserAuthData(userData)
 	if err != nil {
 		return models.UserData{}, nil, err
@@ -26,7 +26,7 @@ func (n *User) AuthUser(userData models.UserData) (models.UserData, []byte, erro
 }
 
 // CreateUser создаёт новый пользователя и возвращает его UUID,ключ для востановления пороля, ошибку
-func (n *User) CreateUser(userData models.UserData) (uuid.UUID, string, []byte, error) {
+func (n *UserApi) CreateUser(userData models.UserData) (uuid.UUID, string, []byte, error) {
 	Security, dek, err := encrypt.InitUser(userData.Password)
 	if err != nil {
 		return uuid.Nil, "", nil, err

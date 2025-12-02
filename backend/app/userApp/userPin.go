@@ -1,4 +1,4 @@
-package user
+package userApp
 
 import (
 	"crypto/rand"
@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (n *User) InitPinCode(pinCode string, userUuid uuid.UUID, dek []byte) error {
+func (n *UserApi) InitPinCode(pinCode string, userUuid uuid.UUID, dek []byte) error {
 	if len(pinCode) > 4 || len(pinCode) < 12 {
 		return errors.New("pin code length is not valid")
 	}
@@ -36,7 +36,7 @@ func (n *User) InitPinCode(pinCode string, userUuid uuid.UUID, dek []byte) error
 	return nil
 }
 
-func (n *User) CheckPinCode(pinCode string, userUuid uuid.UUID) ([]byte, error) {
+func (n *UserApi) CheckPinCode(pinCode string, userUuid uuid.UUID) ([]byte, error) {
 	if len(pinCode) > 4 || len(pinCode) < 12 {
 		return nil, errors.New("pin code length is not valid")
 	}
