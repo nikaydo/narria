@@ -5,10 +5,13 @@ import (
 	"log"
 	"narria/backend/app"
 	"narria/backend/app/userApp"
+	"narria/backend/plugins"
+	"net/http"
 
 	"narria/backend/database"
 	"narria/backend/system"
 
+	"github.com/google/uuid"
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
@@ -50,10 +53,19 @@ func main() {
 	// 'Mac' options tailor the application when running an macOS.
 	var dek []byte
 	api := &app.NarriaApi{
-		DBase: db,
-		User:  &userApp.UserApi{DBase: db},
-		Dek:   &dek,
+		DBase:   db,
+		User:    &userApp.UserApi{DBase: db},
+		Plugins: &plugins.Plugins{Plugins: make(map[uuid.UUID]plugins.PluginData), Frontend: http.NewServeMux()},
+		Dek:     &dek,
 	}
+	if err := api.Plugins.LoadPlugin(Cfg.PluginsPath); err != nil {
+		log.Fatal(err)
+	}
+	go func() {
+		if err := api.Plugins.ListenAndServe(Cfg.AddrFrontend); err != nil {
+			log.Fatal(err)
+		}
+	}()
 	app := application.New(application.Options{
 		Name:        "narria",
 		Description: "A demo of using raw HTML & CSS",

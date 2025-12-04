@@ -1,0 +1,8 @@
+{
+    "id": "4a4e4727-6935-4356-a069-243bd052fa48",
+    "description": {
+        "display_name": "финансы",
+        "description": "finance plugin"
+    },
+    "frontend_entry": "index.html"
+}

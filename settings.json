@@ -1,4 +1,5 @@
 {
-    "db_path": "narria.db"
-    
+    "db_path": "narria.db",
+    "plugins_path": "plugins",
+    "addr_frontend": "localhost:25565"
 }

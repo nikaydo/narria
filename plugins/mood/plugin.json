@@ -1,0 +1,8 @@
+{
+    "id": "7e7e3e79-b74f-491f-8d44-6affd964b997",
+    "description": {
+        "display_name": "муд",
+        "description": "mood plugin"
+    },
+    "frontend_entry": "index.html"
+}
