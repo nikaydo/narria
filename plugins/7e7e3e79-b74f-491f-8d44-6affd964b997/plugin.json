@@ -1,7 +1,7 @@
 {
-    "id": "4a4e4727-6935-4356-a069-243bd052fa48",
+    "id": "7e7e3e79-b74f-491f-8d44-6affd964b997",
     "description": {
-        "display_name": "финансы",
+        "display_name": "finance",
         "description": "finance plugin"
     },
     "frontend_entry": "index.html"

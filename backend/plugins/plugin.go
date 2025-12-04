@@ -35,11 +35,11 @@ func (n *Plugins) LoadPlugin(path string) error {
 		}
 
 		if plugin.Plugnin.FrontendEntry != "" {
+			plugin.Tokens = &Tokens{}
 			if err := plugin.InitFrontend(); err != nil {
 				return err
 			}
 		}
-
 		n.Plugins[pId] = plugin
 	}
 	return nil

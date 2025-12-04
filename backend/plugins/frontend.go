@@ -7,7 +7,6 @@ import (
 )
 
 func (f *Plugins) HandleFiles() {
-
 	f.Frontend.HandleFunc("/plugin/", func(w http.ResponseWriter, r *http.Request) {
 		jwtToken := r.URL.Query().Get("jwt")
 		pluginId := r.URL.Query().Get("plugin")
@@ -22,12 +21,15 @@ func (f *Plugins) HandleFiles() {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		if _, ok := f.Plugins[pluginUuid]; !ok {
+
+		p, ok := f.Plugins[pluginUuid]
+		if !ok {
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
-
-		_, err = f.Plugins[pluginUuid].Tokens.ValidateToken(f.Plugins[pluginUuid].Tokens.AccessToken)
+		data := p.Tokens.AccessToken
+		data.Token = jwtToken
+		_, err = f.Plugins[pluginUuid].Tokens.ValidateToken(data)
 		if err != nil {
 			if err == ErrTokenExpired {
 				p := f.Plugins[pluginUuid]
@@ -46,10 +48,7 @@ func (f *Plugins) HandleFiles() {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-		http.StripPrefix(
-			"/plugin/",
-			http.FileServer(http.Dir("./plugins")),
-		).ServeHTTP(w, r)
+		http.StripPrefix("/plugin/"+p.Plugnin.Id+"/", http.FileServer(http.Dir("./plugins/"+p.Plugnin.Id))).ServeHTTP(w, r)
 	})
 }
 

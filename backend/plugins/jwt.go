@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/google/uuid"
 )
 
 var (
@@ -35,13 +34,14 @@ func (t *Tokens) GenSecret() error {
 		return err
 	}
 	if t.AccessToken.TTL == 0 {
-		t.AccessToken.TTL = 10
+		t.AccessToken.TTL = 1
 	}
 	if t.RefreshToken.TTL == 0 {
-		t.RefreshToken.TTL = 60
+		t.RefreshToken.TTL = 10
 	}
 	return nil
 }
+
 func (t *Tokens) GetToken() error {
 	var err error
 	t.AccessToken.Token, err = createToken(t.AccessToken.Secret, t.AccessToken.TTL)
@@ -52,10 +52,11 @@ func (t *Tokens) GetToken() error {
 	if err != nil {
 		return fmt.Errorf("error creating refresh token: %w", err)
 	}
+	fmt.Println("token::::   ", t.AccessToken.Token)
 	return nil
 }
 
-func (t *Tokens) ValidateToken(tokenData TokensData) (uuid.UUID, error) {
+func (t *Tokens) ValidateToken(tokenData TokensData) (string, error) {
 	token, err := jwt.Parse(tokenData.Token, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("no valid signing method")
@@ -70,7 +71,7 @@ func (t *Tokens) ValidateToken(tokenData TokensData) (uuid.UUID, error) {
 			}
 			return uuid, ErrTokenExpired
 		}
-		return uuid.Nil, fmt.Errorf("failed to parse token: %w", err)
+		return "", fmt.Errorf("failed to parse token: %w", err)
 	}
 	return setClaims(token)
 }
@@ -90,14 +91,14 @@ func createToken(secret []byte, tokenTTL int) (string, error) {
 	return tokenString, nil
 }
 
-func setClaims(token *jwt.Token) (uuid.UUID, error) {
+func setClaims(token *jwt.Token) (string, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return uuid.Nil, fmt.Errorf("invalid token")
+		return "", fmt.Errorf("invalid token")
 	}
-	id, ok := claims["sub"].(string)
+	sub, ok := claims["sub"].(string)
 	if !ok {
-		return uuid.Nil, fmt.Errorf("cant parse id from jwt token")
+		return "", fmt.Errorf("cant parse id from jwt token")
 	}
-	return uuid.MustParse(id), nil
+	return sub, nil
 }
